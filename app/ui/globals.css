@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFF0C4;
+  --foreground: #981c13;
+  --textColor: black;
+  --hoverColor: #a12219;
+  --secondaryHover: #f5e1c0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: #C8ACD6;
+    --background: #17153B;
+    --textColor: #831b8d;
+    --hoverColor: #c1a4cf;
+    --secondaryHover: #2e2c4a;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+header {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+h1 {
+  font-size: 64px;
+}
+
+.logout {
+  background: rgb(236, 99, 99);
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  padding: 0.5rem 1rem;
+  font-weight: normal;
+
+  margin: 2rem 25%;
+  &:hover {
+    color: white;
+    font-weight: bold;
+  }
+}
+
+.sidebar-link {
+  color: var(--textColor);
+  text-decoration: none;
+  display: block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px 0 #0001;
+  font-size: 22px;
+  font-weight: normal;
+
+  &:hover {
+    color:white;
+    font-weight: bold;
+    background-color: var(--hoverColor);
+  }
+}
+
+.sidebar-root {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 16px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  font-size: 18px;
+}
