@@ -39,10 +39,11 @@ interface MultiAxisDataPoint {
 }
 
 function extractVital(
-  patientData: VitalsEntry[],
+  latestEntries: VitalsEntry[],
+
   vitalKey: keyof VitalsEntry
 ): { time: string; value: number }[] {
-  return patientData
+  return latestEntries
     .filter(d => typeof d[vitalKey] === 'number')
     .map(d => ({
       time: d.timestamp,
@@ -56,10 +57,10 @@ function extractMultiAxisSeries(
 ): MultiAxisDataPoint[] {
   return patientData.map(d => {
     const entry: MultiAxisDataPoint = { time: d.timestamp };
-    keys.forEach(key => {      
+    keys.forEach(key => {
       const rawValue = d[key];
       const numericValue = rawValue != null ? parseFloat(String(rawValue)) : NaN;
-      
+
       if (isFinite(numericValue)) {
         entry[key] = numericValue;
       }
@@ -160,11 +161,13 @@ export default function Page() {
           .sort((a, b) => a.patientId.localeCompare(b.patientId))
           .map((patient: any) => {
             const patientData = data?.filter((d: any) => d.deviceID === patient.deviceID) ?? [];
-            const heartRateSeries = extractVital(patientData, 'heartRate');
-            const o2Series = extractVital(patientData, 'o2Sat');
-            const tempSeries = extractVital(patientData, 'skinTemp');
-            const accSeries = extractMultiAxisSeries(patientData, ['accX', 'accY', 'accZ']);
-            const gyroSeries = extractMultiAxisSeries(patientData, ['gyroX', 'gyroY', 'gyroZ']);
+            const patientDataArr = data?.filter((d: any) => d.deviceID == patient.deviceID) ?? [];
+            const latestData = patientDataArr[0]?.latestEntries ?? [];
+            const heartRateSeries = extractVital(latestData, 'heartRate');
+            const o2Series = extractVital(latestData, 'o2Sat');
+            const tempSeries = extractVital(latestData, 'skinTemp');
+            const accSeries = extractMultiAxisSeries(latestData, ['accX', 'accY', 'accZ']);
+            const gyroSeries = extractMultiAxisSeries(latestData, ['gyroX', 'gyroY', 'gyroZ']);
             return (
               <div key={patient.deviceID} className="patientDisplay">
                 <div className="patientHeader">

@@ -8,20 +8,37 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const deviceIDs = url.searchParams.getAll('deviceIDs');
   const timestamps = url.searchParams.getAll('timestamps');
+  const N = Number(url.searchParams.get('N')) || 50;
 
-  const pairs = deviceIDs.map((id, idx) => {
-    return {
-      deviceID: id,
-      timestamp: { $gt: timestamps[idx] }
-    };
-  });
+  // Build facet pipelines
+  const facets = deviceIDs.reduce((acc, id, idx) => {
+    acc[id] = [
+      { $match: {
+          deviceID: id,
+          timestamp: { $gt: timestamps[idx] }
+        }
+      },
+      { $sort: { timestamp: -1 } },
+      { $limit: N }
+    ];
+    return acc;
+  }, {} as Record<string, any[]>);
 
-  const results = await db.collection('data')
-    .find({ $or: pairs })
-    .toArray();
+  const results = await db.collection('data').aggregate([
+    { $facet: facets }
+  ]).toArray();
 
-  return NextResponse.json(results);
+  // Format for frontend
+  const output = Object.entries(results[0]).map(([deviceID, latestEntries]) => ({
+    deviceID,
+    latestEntries
+  }));
+
+  console.log("output: ", output);
+
+  return NextResponse.json(output);
 }
+
 
 export async function POST(req: Request) {
   const client = await clientPromise;

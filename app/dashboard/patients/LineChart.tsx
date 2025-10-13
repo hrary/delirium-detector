@@ -53,6 +53,9 @@ const LineChart: React.FC<LineChartProps> = ({
     const chartData = {
         labels: dataArray.map(d => {
             const date = new Date(d.time);
+            console.log('chartData: ', d);
+            console.log("date: ", date);
+            console.log("hr:, ", d['heartRate']);
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }),
         datasets: lines.map((key, idx) => {
@@ -85,8 +88,8 @@ const LineChart: React.FC<LineChartProps> = ({
             }
         },
         animation: {
-            duration: 300,
-            easing: 'linear',
+            duration: 0,
+            easing: 'linear'
         } as const
     };
 
