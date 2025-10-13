@@ -83,7 +83,11 @@ const LineChart: React.FC<LineChartProps> = ({
                 beginAtZero: false,
                 // Chart.js will auto-scale based on data
             }
-        }
+        },
+        animation: {
+            duration: 300,
+            easing: 'linear',
+        } as const
     };
 
     return (

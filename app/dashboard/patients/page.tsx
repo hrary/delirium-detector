@@ -10,7 +10,7 @@ import './patients.css';
 import { useState } from 'react';
 import LineChart from './LineChart';
 
-const fetcher = (url:string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 interface Patient {
   patientId: string;
@@ -59,11 +59,11 @@ function extractMultiAxisSeries(
     const entry: MultiAxisDataPoint = { time: d.timestamp };
     keys.forEach(key => {
       // **OLD: if (typeof d[key] === 'number') {**
-      
+
       const rawValue = d[key];
       // Check if value exists, convert to number, and check if it's a finite number (not NaN, Infinity)
       const numericValue = rawValue != null ? parseFloat(String(rawValue)) : NaN;
-      
+
       if (isFinite(numericValue)) { // <-- NEW, ROBUST CHECK
         entry[key] = numericValue;
       }
@@ -82,11 +82,13 @@ export default function Page() {
   const { data: patients, error, isLoading } = useSWR<Patient[]>('/api/patients', fetcher, { refreshInterval: 500 });
   const deviceIDs = patients?.map(p => p.deviceID)
   const timestamps = patients?.map(p => p.timestamp);
+  const numEntries = 50;
   const params = new URLSearchParams();
   deviceIDs?.forEach(id => params.append('deviceIDs', id));
   timestamps?.forEach(ts => params.append('timestamps', ts));
+  params.append('N', numEntries.toString());
   const queryString = params.toString();
-  const { data: data} = useSWR(`/api/data?${queryString}`, fetcher, { refreshInterval: 500 });
+  const { data: data } = useSWR(`/api/data?${queryString}`, fetcher, { refreshInterval: 500 });
 
   const wS = 275;
   const hS = 275;
@@ -162,7 +164,8 @@ export default function Page() {
           .sort((a, b) => a.patientId.localeCompare(b.patientId))
           .map((patient: any) => {
             // Pull out data entries matching this patient/device
-            const patientData = data?.filter((d: any) => d.deviceID === patient.deviceID) ?? [];
+            const patientBatch = data?.find((d: any) => d.deviceID === patient.deviceID);
+            const patientData = patientBatch?.latestEntries ?? [];
             const heartRateSeries = extractVital(patientData, 'heartRate');
             const o2Series = extractVital(patientData, 'o2Sat');
             const tempSeries = extractVital(patientData, 'skinTemp');
@@ -177,7 +180,7 @@ export default function Page() {
                 {patientData.length > 0 ? (
                   <div className="chartsContainer">
                     <LineChart
-                      dataArray={heartRateSeries}
+                      dataArray={heartRateSeries.reverse()}
                       lines={['value']}
                       labels={['Heart Rate']}
                       width={wS}
@@ -185,7 +188,7 @@ export default function Page() {
                       color="rgb(255, 99, 132)"
                     />
                     <LineChart
-                      dataArray={o2Series}
+                      dataArray={o2Series.reverse()}
                       lines={['value']}
                       labels={['O2 Saturation']}
                       width={wS}
@@ -193,7 +196,7 @@ export default function Page() {
                       color="rgb(54, 162, 235)"
                     />
                     <LineChart
-                      dataArray={tempSeries}
+                      dataArray={tempSeries.reverse()}
                       lines={['value']}
                       labels={['Temperature']}
                       width={wS}
@@ -201,7 +204,7 @@ export default function Page() {
                       color="rgb(255, 206, 86)"
                     />
                     <LineChart
-                      dataArray={accSeries}
+                      dataArray={accSeries.reverse()}
                       lines={['accX', 'accY', 'accZ']}
                       labels={['Acc X', 'Acc Y', 'Acc Z']}
                       width={400}
@@ -209,7 +212,7 @@ export default function Page() {
                       colors={['rgba(170, 51, 177, 1)', 'rgb(54, 162, 235)', 'rgba(40, 147, 69, 1)']}
                     />
                     <LineChart
-                      dataArray={gyroSeries}
+                      dataArray={gyroSeries.reverse()}
                       lines={['gyroX', 'gyroY', 'gyroZ']}
                       labels={['Gyro X', 'Gyro Y', 'Gyro Z']}
                       width={400}
