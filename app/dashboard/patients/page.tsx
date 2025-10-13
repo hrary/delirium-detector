@@ -31,7 +31,6 @@ interface VitalsEntry {
   gyroX?: number;
   gyroY?: number;
   gyroZ?: number;
-  // ...other fields
 }
 
 interface MultiAxisDataPoint {
@@ -57,14 +56,11 @@ function extractMultiAxisSeries(
 ): MultiAxisDataPoint[] {
   return patientData.map(d => {
     const entry: MultiAxisDataPoint = { time: d.timestamp };
-    keys.forEach(key => {
-      // **OLD: if (typeof d[key] === 'number') {**
-
+    keys.forEach(key => {      
       const rawValue = d[key];
-      // Check if value exists, convert to number, and check if it's a finite number (not NaN, Infinity)
       const numericValue = rawValue != null ? parseFloat(String(rawValue)) : NaN;
-
-      if (isFinite(numericValue)) { // <-- NEW, ROBUST CHECK
+      
+      if (isFinite(numericValue)) {
         entry[key] = numericValue;
       }
     });
@@ -101,7 +97,7 @@ export default function Page() {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
-    setTimestamp(Date.now()); // Trigger revalidation
+    setTimestamp(Date.now());
     const res = await fetch('/api/patients', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -163,9 +159,7 @@ export default function Page() {
           ?.slice() // copy so you don't mutate the state idk what this does
           .sort((a, b) => a.patientId.localeCompare(b.patientId))
           .map((patient: any) => {
-            // Pull out data entries matching this patient/device
-            const patientBatch = data?.find((d: any) => d.deviceID === patient.deviceID);
-            const patientData = patientBatch?.latestEntries ?? [];
+            const patientData = data?.filter((d: any) => d.deviceID === patient.deviceID) ?? [];
             const heartRateSeries = extractVital(patientData, 'heartRate');
             const o2Series = extractVital(patientData, 'o2Sat');
             const tempSeries = extractVital(patientData, 'skinTemp');
