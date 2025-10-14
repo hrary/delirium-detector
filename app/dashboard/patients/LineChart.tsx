@@ -8,12 +8,24 @@ import {
     LinearScale,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Chart,
 } from 'chart.js';
+import streamingPlugin from 'chartjs-plugin-streaming';
+import 'chartjs-adapter-date-fns';
 
-ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
+ChartJS.register(
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    streamingPlugin
+);
 
-// Type for a single data point (time + any number of vital keys)
+
 export interface ChartDataPoint {
     time: string;
     [key: string]: number | string;
@@ -21,8 +33,8 @@ export interface ChartDataPoint {
 
 interface LineChartProps {
     dataArray: ChartDataPoint[];
-    lines: string[]; // e.g., ['heartRate'] or ['accX', 'accY', 'accZ']
-    labels: string[]; // e.g., ['Heart Rate'] or ['Acc X', 'Acc Y', 'Acc Z']
+    lines: string[]; 
+    labels: string[];
     width?: number;
     height?: number;
     title?: string;
@@ -39,6 +51,8 @@ const COLORS = [
     'rgb(255, 159, 64)',   // orange
 ];
 
+
+
 const LineChart: React.FC<LineChartProps> = ({
     dataArray,
     lines,
@@ -50,53 +64,60 @@ const LineChart: React.FC<LineChartProps> = ({
     colors
 }) => {
     // Prepare chart.js data structure
+
+    function getLatestValueForLine() {
+        if (!dataArray || dataArray.length === 0) return null;
+        const latest = dataArray[dataArray.length - 1]; 
+        const key = lines[0]; 
+        return typeof latest[key] === 'number' ? latest[key] : null;
+    }
+
     const chartData = {
-        labels: dataArray.map(d => {
-            const date = new Date(d.time);
-            console.log('chartData: ', d);
-            console.log("date: ", date);
-            console.log("hr:, ", d['heartRate']);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }),
-        datasets: lines.map((key, idx) => {
-            const linecolor =
-                lines.length === 1 && color ? color :
-                    colors && colors[idx] ? colors[idx] :
-                        COLORS[idx % COLORS.length];
-            return {
-                label: labels[idx] || key,
-                data: dataArray.map(d => typeof d[key] === 'number' ? d[key] as number : null),
-                borderColor: linecolor,
-                backgroundColor: linecolor,
-                fill: false,
-                tension: 0.2,
-                spanGaps: true
-            };
-        })
+        datasets: [
+            {
+                label: labels[0] || lines[0],
+                borderColor: color || COLORS[0],
+                data: []
+            }
+        ]
     };
+
 
     const options = {
-        responsive: false,
-        plugins: {
-            legend: { position: 'top' as const },
-            title: { display: !!title, text: title }
-        },
         scales: {
+            x: {
+                type: "realtime" as "realtime",
+                realtime: {
+                    duration: 20000,    // Show last 20 seconds
+                    refresh: 1000,      // Update every second
+                    delay: 1000,        // 1s display delay for smooth animation
+                    onRefresh: (chart: Chart) => {
+                        const latestValue = getLatestValueForLine();
+                        if (typeof latestValue === "number") {
+                            chart.data.datasets.forEach(dataset => {
+                                dataset.data.push({
+                                    x: Date.now(),
+                                    y: latestValue
+                                });
+                            });
+                        }
+                    }
+
+                }
+            },
             y: {
-                beginAtZero: false,
-                // Chart.js will auto-scale based on data
+                beginAtZero: true
             }
         },
-        animation: {
-            duration: 0,
-            easing: 'linear'
-        } as const
-    };
+        plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Live Streaming Chart' }
+        }
+    } as const;
+
 
     return (
-        <div style={{ width, height }}>
-            <Line data={chartData} options={options} width={width} height={height} />
-        </div>
+        <Line data={chartData} options={options} height={200} width={400} />
     );
 };
 
