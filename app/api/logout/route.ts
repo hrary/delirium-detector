@@ -2,10 +2,9 @@ import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import { cookies } from "next/headers";
 
-// For App Router (Next.js 13+)
 export async function POST() {
   const response = NextResponse.json({ success: true });
-  // Set the auth-token cookie to expire immediately
+  // expires auth token
   const client = await clientPromise;
   const db = client.db();
   const cookieStore = await cookies();

@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   }
 
   // Issue cookie/token for authentication
+  // TO DO: add real token generation instead of whatever this is (more secure) (not needed until end)
   const response = NextResponse.json({ message: 'Login successful.' });
   response.cookies.set('auth-token', 'SOME_GENERATED_TOKEN', {
     httpOnly: true,

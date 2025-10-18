@@ -24,8 +24,11 @@ export default function Sidebar() {
           <Link href="/dashboard/patients" className="sidebar-link">
             Patients
           </Link>
-          <Link href="/dashboard/log" className="sidebar-link">
+          <Link href="/dashboard/event_log" className="sidebar-link">
             System Log
+          </Link>
+          <Link href="/dashboard/data_log" className="sidebar-link">
+            Data Log
           </Link>
           <Link href="/dashboard/about" className="sidebar-link">
             About

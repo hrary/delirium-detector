@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const client = await clientPromise;
   const db = client.db();
   try {
-    const data = await req.json(); // Modern way to get request body
+    const data = await req.json(); // get req body
     const deviceActivity = await db.collection('assignments').findOne({ deviceID: data.deviceID });
     if (!deviceActivity) {
         await db.collection('assignments').insertOne(data);
