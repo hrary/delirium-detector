@@ -49,7 +49,6 @@ const LineChart: React.FC<LineChartProps> = ({
     color,
     colors
 }) => {
-    // Prepare chart.js data structure
     const chartData = {
         labels: dataArray.map(d => {
             const date = new Date(d.time);

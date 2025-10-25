@@ -118,12 +118,10 @@ export default function Page() {
     const wS = 800;
     const hS = 400;
 
-    // Loading and error states
     if (patientsLoading) return <div>Loading patient information...</div>;
     if (patientsError) return <div>Error loading patient data.</div>;
     if (!patient) return <div>Patient not found.</div>;
 
-    // Extract chart data
     const patientDataArr = data?.filter((d: any) => d.deviceId === patient.deviceId) ?? [];
     const latestData = patientDataArr[0]?.latestEntries ?? [];
     const heartRateSeries = extractVital(latestData, 'heartRate');
