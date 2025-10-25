@@ -1,9 +1,3 @@
-.patientTitle {
-    color: var(--textColor);
-    font-size: 2rem;
-    font-weight: bold;
-}
-
 .patientEditor {
     margin-top: 1rem;
     background-color: var(--foreground);

@@ -6,15 +6,15 @@ export async function GET(req: Request) {
   const db = client.db();
 
   const url = new URL(req.url);
-  const deviceIDs = url.searchParams.getAll('deviceIDs');
+  const deviceIds = url.searchParams.getAll('deviceIds');
   const timestamps = url.searchParams.getAll('timestamps');
   const N = Number(url.searchParams.get('N')) || 50;
 
   // Build pipelines
-  const facets = deviceIDs.reduce((acc, id, idx) => {
+  const facets = deviceIds.reduce((acc, id, idx) => {
     acc[id] = [
       { $match: {
-          deviceID: id,
+          deviceId: id,
           timestamp: { $gt: timestamps[idx] }
         }
       },
@@ -29,8 +29,8 @@ export async function GET(req: Request) {
   ]).toArray();
 
   // Format for frontend
-  const output = Object.entries(results[0]).map(([deviceID, latestEntries]) => ({
-    deviceID,
+  const output = Object.entries(results[0]).map(([deviceId, latestEntries]) => ({
+    deviceId,
     latestEntries
   }));
 

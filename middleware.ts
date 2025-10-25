@@ -9,6 +9,8 @@ export function middleware(request: NextRequest) {
   // Define public routes that don't require auth
   const publicPaths = ['/login', '/'];
 
+  const adminPaths = ['/dashboard/users'];
+
   // If the route is public, allow access
   if (publicPaths.includes(request.nextUrl.pathname)) {
     return NextResponse.next();
@@ -17,6 +19,15 @@ export function middleware(request: NextRequest) {
   // If the auth cookie is missing, redirect to login
   if (!authToken) {
     return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  if (adminPaths.includes(request.nextUrl.pathname)) {
+    const role = request.cookies.get('role')?.value;
+    if (role !== 'admin') {
+      return NextResponse.redirect(new URL('/dashboard/unauthorized', request.url));
+    } else {
+      return NextResponse.next();
+    }
   }
 
   // Otherwise, continue as normal

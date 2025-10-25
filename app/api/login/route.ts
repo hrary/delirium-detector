@@ -30,6 +30,11 @@ export async function POST(req: Request) {
     path: '/',
     sameSite: 'lax',
   });
+  response.cookies.set('role', user.role, {
+    httpOnly: true,
+    path: '/',
+    sameSite: 'lax',
+  });
   await db.collection('event_log').insertOne({ type: 'User login', timestamp: new Date(), details: { username } });
   return response;
 }
