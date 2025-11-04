@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const { username, password } = await req.json();
   const client = await clientPromise;
   const db = client.db();
-  const user = await db.collection('users').findOne({ username});
+  const user = await db.collection('users').findOne({ username });
 
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 401 });

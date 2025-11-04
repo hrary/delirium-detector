@@ -1,4 +1,4 @@
-.patient-item {
+.patient-ok {
     padding: 1rem;
     margin: 0.5rem;
     background-color: var(--foreground);
@@ -7,6 +7,34 @@
     border-radius: 12px;
     color: var(--textColor);
     font-size: 1.4rem;
+}
+.patient-warning {
+    padding: 1rem;
+    margin: 0.5rem;
+    background-color: var(--warningBackground);
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    border-radius: 12px;
+    color: var(--textColor);
+    font-size: 1.4rem;
+}
+.patient-critical {
+    padding: 1rem;
+    margin: 0.5rem;
+    background-color: var(--criticalBackground);
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    border-radius: 12px;
+    color: var(--textColor);
+    font-size: 1.4rem;
+
+    animation: flash-red 1s infinite alternate
+}
+
+
+@keyframes flash-red {
+    0% { background-color: var(--criticalFlash); }
+    100% { background-color: var(--criticalBackground); }
 }
 
 .status-ok {

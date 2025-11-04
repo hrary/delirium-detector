@@ -1,0 +1,96 @@
+.userEditor {
+    margin-top: 1rem;
+    background-color: var(--foreground);
+    padding: 0.5rem 0.5rem 1rem 0.5rem;
+    color: var(--textColor);
+    font-size: 1.2rem;
+    border-radius: 10px;
+}
+
+.userForm {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    align-items: end;
+    justify-content: center;
+}
+
+.inputLabel {
+    font-weight: 600;
+    color: var(--textColor);
+    margin: 0.2rem 2rem 0.2rem 0.5rem;
+}
+
+.inputField {
+    font-weight: 500;
+    color: var(--textColor);
+    background-color: white;
+    border-radius: 2px;
+    padding: 0 0 0 0.3rem;
+}
+
+.addUserButton {
+    border-radius: 3px;
+    background-color: rgb(47, 221, 41);
+    color: black;
+    padding: 0.5rem;
+    font-weight: bold;
+
+    &:hover {
+        color: white;
+        cursor: pointer;
+    }
+}
+
+.subtitle {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--textColor);
+    margin-left: 1.5rem;
+}
+
+.errorMessage {
+    color: red;
+    font-weight: bold;
+    margin-left: 1.5rem;
+}
+
+.successMessage {
+    color: rgb(24, 167, 19);
+    font-weight: bold;
+    margin-left: 1.5rem;
+}
+
+.userListItem {
+    background-color: var(--foreground);
+    padding: 0.8rem;
+    color: var(--textColor);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: left;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.deleteButton {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    justify-self: end;
+
+    &:hover {
+        color: white;
+        transform: scale(1.1);
+    }
+}
+
+.userListTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--foreground);
+    margin: 1.5rem 0 0.5rem 0;
+}

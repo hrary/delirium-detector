@@ -118,6 +118,36 @@ export default function Page() {
     const wS = 800;
     const hS = 400;
 
+    // Scroll helper from copilot
+    function scrollToTop() {
+        try {
+            // Prefer the dashboard content container which uses `flex-grow` + `md:overflow-y-auto`.
+            const preferred = document.querySelector('.flex-grow') as HTMLElement | null;
+            if (preferred && preferred.scrollHeight > preferred.clientHeight) {
+                preferred.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            // Otherwise look for any ancestor with scrollable overflow
+            const mainEl = document.querySelector('main') as HTMLElement | null;
+            let cur = mainEl;
+            while (cur) {
+                const style = window.getComputedStyle(cur);
+                if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+                    cur.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                cur = cur.parentElement as HTMLElement | null;
+            }
+
+            // Fallback to window
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            // In case of any error, fallback to window
+            window.scrollTo({ top: 0 });
+        }
+    }
+
     if (patientsLoading) return <div>Loading patient information...</div>;
     if (patientsError) return <div>Error loading patient data.</div>;
     if (!patient) return <div>Patient not found.</div>;
@@ -253,7 +283,7 @@ export default function Page() {
                 )
             )}
 
-            <button className="backToTopButton" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <button className="backToTopButton" onClick={scrollToTop}>
                 ↑ Back to Top
             </button>
 

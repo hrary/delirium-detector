@@ -18,8 +18,11 @@
     --foreground: #C8ACD6;
     --background: #17153B;
     --textColor: #831b8d;
-    --hoverColor: #c1a4cf;
+    --hoverColor: #bc9ccb;
     --secondaryHover: #2e2c4a;
+    --criticalFlash: #ffcccc;
+    --criticalBackground: #ff6666;
+    --warningBackground: #ffdd57;
   }
 }
 
