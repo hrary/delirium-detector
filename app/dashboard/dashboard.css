@@ -31,12 +31,6 @@
     animation: flash-red 1s infinite alternate
 }
 
-
-@keyframes flash-red {
-    0% { background-color: var(--criticalFlash); }
-    100% { background-color: var(--criticalBackground); }
-}
-
 .status-ok {
     color: green;
 }

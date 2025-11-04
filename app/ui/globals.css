@@ -40,51 +40,7 @@ h1 {
   font-size: 56px;
 }
 
-.logout {
-  background: rgb(236, 99, 99);
-  color: black;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 50%;
-  padding: 0.5rem 1rem;
-  font-weight: normal;
-
-  margin: 2rem 25%;
-  &:hover {
-    color: white;
-    font-weight: bold;
-  }
-}
-
-.sidebar-link {
-  color: var(--textColor);
-  text-decoration: none;
-  display: block;
-  padding: 8px 16px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px 0 #0001;
-  font-size: 22px;
-  font-weight: normal;
-
-  &:hover {
-    color:white;
-    font-weight: bold;
-    background-color: var(--hoverColor);
-  }
-}
-
-.sidebar-root {
-  background: var(--foreground);
-  color: var(--background);
-  padding: 16px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-footer {
-  margin-top: auto;
-  font-size: 18px;
+@keyframes flash-red {
+    0% { background-color: var(--criticalFlash); }
+    100% { background-color: var(--criticalBackground); }
 }

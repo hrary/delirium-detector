@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/ui/globals.css";
-import {Inter} from 'next/font/google';
-
+import { Inter } from 'next/font/google';
+import { AlertProvider } from "./context/AlertContext";
+import LayoutContent from "./layout-client";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -10,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Delirium Detector",
-  description: "A tool for detecting delirium in patients",
+  description: "A tool for tracking patient status and detecting delirium",
 };
 
 export default function RootLayout({
@@ -23,7 +24,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased`}
       >
-        {children}
+        <AlertProvider>
+          <LayoutContent>
+            {children}
+          </LayoutContent>
+        </AlertProvider>
       </body>
     </html>
   );

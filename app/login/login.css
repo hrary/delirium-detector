@@ -2,7 +2,7 @@
     background-color: var(--foreground);
     width: 40%;
     padding: 1rem 1rem 2rem 1rem;
-    margin: auto auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: left;
