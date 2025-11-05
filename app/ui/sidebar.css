@@ -58,5 +58,5 @@
   font-size: 22px;
   font-weight: normal;
   
-  animation: flash-red 1s infinite;
+  animation: flash-red 1s infinite alternate;
 }
