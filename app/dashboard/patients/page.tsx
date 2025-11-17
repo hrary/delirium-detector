@@ -24,9 +24,9 @@ interface Patient {
 interface VitalsEntry {
   deviceId: string;
   timestamp: string;
-  heartRate?: number;
-  o2Sat?: number;
-  skinTemp?: number;
+  HR?: number;
+  SpO2?: number;
+  Temp?: number;
   accX?: number;
   accY?: number;
   accZ?: number;
@@ -165,9 +165,9 @@ export default function Page() {
             const patientData = data?.filter((d: any) => d.deviceId === patient.deviceId) ?? [];
             const patientDataArr = data?.filter((d: any) => d.deviceId == patient.deviceId) ?? [];
             const latestData = patientDataArr[0]?.latestEntries ?? [];
-            const heartRateSeries = extractVital(latestData, 'heartRate');
-            const o2Series = extractVital(latestData, 'o2Sat');
-            const tempSeries = extractVital(latestData, 'skinTemp');
+            const heartRateSeries = extractVital(latestData, 'HR');
+            const o2Series = extractVital(latestData, 'SpO2');
+            const tempSeries = extractVital(latestData, 'Temp');
             const accSeries = extractMultiAxisSeries(latestData, ['accX', 'accY', 'accZ']);
             const gyroSeries = extractMultiAxisSeries(latestData, ['gyroX', 'gyroY', 'gyroZ']);
             return (
