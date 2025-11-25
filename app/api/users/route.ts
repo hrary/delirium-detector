@@ -27,7 +27,7 @@ export async function GET() {
     return NextResponse.json(users);
 }
 
-export async function DELETE(req: Request, { params }: { params: { username: string } }) {
+export async function DELETE(req: Request) {
     const client = await clientPromise;
     const db = client.db();
     try {

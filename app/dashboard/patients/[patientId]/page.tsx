@@ -264,9 +264,9 @@ export default function Page() {
                                 {latestData.map((entry: VitalsEntry, index: number) => (
                                     <tr className="dataTableRow" key={index}>
                                         <td className="dataTableCell">{new Date(entry.timestamp).toLocaleString()}</td>
-                                        <td className="dataTableCell">{entry.heartRate ?? '-'}</td>
-                                        <td className="dataTableCell">{entry.o2Sat ?? '-'}</td>
-                                        <td className="dataTableCell">{entry.skinTemp ?? '-'}</td>
+                                        <td className="dataTableCell">{entry.HR ?? '-'}</td>
+                                        <td className="dataTableCell">{entry.SpO2 ?? '-'}</td>
+                                        <td className="dataTableCell">{entry.Temp ?? '-'}</td>
                                         <td className="dataTableCell">{entry.accX?.toFixed(2) ?? '-'}</td>
                                         <td className="dataTableCell">{entry.accY?.toFixed(2) ?? '-'}</td>
                                         <td className="dataTableCell">{entry.accZ?.toFixed(2) ?? '-'}</td>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import './users.css';
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -13,7 +13,7 @@ export default function Page() {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const { data: users, error } = useSWR('/api/users', fetcher, { refreshInterval: 500 });
+    const { data: users, error, mutate } = useSWR('/api/users', fetcher, { refreshInterval: 500 });
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -44,6 +44,7 @@ export default function Page() {
 
         if (res.ok) {
             // User deleted successfully
+            mutate('/api/users'); // Refresh the user list
         } else {
             const data = await res.json();
             setErrorMessage(data.error || 'Failed to delete user');
